@@ -427,6 +427,25 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
       activeDay: 'simpledatepicker-active-day',
       today: 'simpledatepicker-today'
     },
+    // Navigation.
+    navigation: {
+      previousYear: {
+        content: '&#x00AB;',
+        title: 'previous year'
+      },
+      previousMonth: {
+        content: '&#x2039;',
+        title: 'previous month'
+      },
+      nextMonth: {
+        content: '&#x203A;',
+        title: 'next month'
+      },
+      nextYear: {
+        content: '&#x00BB;',
+        title: 'next year'
+      }
+    },
     // Date formats.
     formats: {
       titleDate: 'MMMM, YYYY',
@@ -763,6 +782,15 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
     var createElement = SimpleDatePicker.createElement,
         options = this.options,
         classes = options.classes,
+        classPrevious = classes.titlePrevious,
+        classNext = classes.titleNext,
+        classYear = classes.titleYear,
+        classMonth = classes.titleMonth,
+        navigation = options.navigation,
+        previousYear = navigation.previousYear,
+        previousMonth = navigation.previousMonth,
+        nextMonth = navigation.nextMonth,
+        nextYear = navigation.nextYear,
         formats = options.formats,
         formatTitleDate = formats.titleDate,
         formatHeaderDay = formats.headerDay,
@@ -787,11 +815,11 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
 
     // Month, Year header and navigation.
     title = createElement('div', {'class': classes.title}, calendar);
-    createElement('span', {'class': classes.titlePrevious + ' ' + classes.titleYear}, title, '&#x00AB;');
-    createElement('span', {'class': classes.titlePrevious + ' ' + classes.titleMonth}, title, '&#x2039;');
+    createElement('span', {'class': classPrevious + ' ' + classYear, title: previousYear.title}, title, previousYear.content);
+    createElement('span', {'class': classPrevious + ' ' + classMonth, title: previousMonth.title}, title, previousMonth.content);
     titleDate = createElement('span', {'class': classes.titleDate}, title, date.format(formatTitleDate));
-    createElement('span', {'class': classes.titleNext + ' ' + classes.titleMonth}, title, '&#x203A;');
-    createElement('span', {'class': classes.titleNext + ' ' + classes.titleYear}, title, '&#x00BB;');
+    createElement('span', {'class': classNext + ' ' + classMonth, title: nextMonth.title}, title, nextMonth.content);
+    createElement('span', {'class': classNext + ' ' + classYear, title: nextYear.title}, title, nextYear.content);
 
     // Days header.
     header = createElement('div', {'class': classes.header}, calendar);
