@@ -324,6 +324,10 @@ SimpleDatePicker.Date = SimpleDatePicker.Class.extend({
     return this.dateObject.valueOf();
   },
 
+  unix: function () {
+    return Math.round(this.valueOf() / 1000);
+  },
+
   format: function (format) {
     return format.replace(this.options.formats, this.replace);
   },
