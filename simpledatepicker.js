@@ -450,7 +450,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
       day: 'D'
     },
     // Element to which attach the calendar.
-    attachTo: null,
+    element: null,
     // Default visibility.
     visible: true
   },
@@ -910,10 +910,10 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
   // Update the position and size of the selector.
   updatePosition: function () {
     var container = this.container,
-        attachTo = this.options.attachTo,
+        element = this.options.element,
         bounds;
-    if (container && attachTo) {
-      bounds = attachTo.getBoundingClientRect();
+    if (container && element) {
+      bounds = element.getBoundingClientRect();
       container.style.position = 'absolute';
       container.style.left = (bounds.left) + 'px';
       container.style.top = (bounds.bottom) + 'px';
