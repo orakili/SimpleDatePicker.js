@@ -2,11 +2,8 @@
 
 'use strict';
 
-// Keep a reference of the global object (window or exports).
-var root = window;
-
 // SimpleDatePicker.
-var SimpleDatePicker = root.SimpleDatePicker = {};
+var SimpleDatePicker = window.SimpleDatePicker = {};
 
 // Bind a function to a context.
 SimpleDatePicker.bind = function (fn, context) {
@@ -1038,4 +1035,4 @@ SimpleDatePicker.datepicker = function (options) {
   return new SimpleDatePicker.DatePicker(options);
 };
 
-})(this);
+})();
