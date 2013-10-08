@@ -1,0 +1,122 @@
+/** Container **/
+.simpledatepicker-container {
+  border: 1px solid #999;
+  background-color: #EEE;
+  padding: 5px;
+  display: inline-block;
+  font-size: 12px;
+  font-family: 'Helvetica Neue', 'Helvetica';
+  color: #555;
+  cursor: default;
+}
+
+/** Calendar **/
+.simpledatepicker-calendar {
+  border-left: 2px solid #CCC;
+  display: inline-block;
+  padding: 5px 5px 0px 10px;
+  width: 184px;
+}
+.simpledatepicker-calendar:first-child {
+  border-left: none;
+  padding: 5px 10px 0px 5px;
+}
+
+/** Title **/
+.simpledatepicker-title {
+  text-align: center;
+  height: 20px;
+  line-height: 12px;
+  font-weight: bold;
+}
+.simpledatepicker-title > span {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 24px;
+  cursor: pointer;
+  width: 20px;
+}
+.simpledatepicker-title > span.simpledatepicker-title-date {
+  width: 104px;
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: normal;
+  cursor: default;
+}
+.simpledatepicker-calendar-first .simpledatepicker-title-next,
+.simpledatepicker-calendar-middle .simpledatepicker-title-previous,
+.simpledatepicker-calendar-middle .simpledatepicker-title-next,
+.simpledatepicker-calendar-last .simpledatepicker-title-previous {
+  visibility:hidden;
+}
+.simpledatepicker-title-month:hover {
+  color: #7EA0E2;
+}
+
+.simpledatepicker-title-year:hover {
+  color:#6FDF81;
+}
+
+/** Header **/
+.simpledatepicker-header {
+  margin: 3px 0;
+}
+.simpledatepicker-header > span {
+  display: inline-block;
+  width: 20px;
+  height: 14px;
+  text-align: right;
+  padding: 1px;
+  margin-left: 5px;
+  font-weight: bold;
+}
+.simpledatepicker-header > span:first-child {
+  margin-left: 0;
+}
+
+/** Days **/
+.simpledatepicker-days {
+  position: relative;
+}
+.simpledatepicker-days > span {
+  overflow: hidden;
+  display: inline-block;
+  width: 20px;
+  height: 14px;
+  line-height: 14px;
+  text-align: right;
+  margin-left: 5px;
+  margin-top: 4px;
+  padding: 1px;
+  cursor: default;
+}
+.simpledatepicker-days > span.simpledatepicker-first-week-day  {
+  margin-left: 0;
+}
+.simpledatepicker-days > span.simpledatepicker-day-in {
+  background-color: #FFF;
+  outline: 1px solid #ccc;
+  cursor: pointer;
+}
+.simpledatepicker-days > span.simpledatepicker-day-out {
+  color: #CCC;
+}
+.simpledatepicker-days > span.simpledatepicker-today {
+  outline: 1px solid #F00;
+}
+.simpledatepicker-days > span.simpledatepicker-selected-day {
+  outline: 1px solid #3366CC;
+}
+.simpledatepicker-days > span.simpledatepicker-day-in.simpledatepicker-selected-day {
+  background-color: #99CCFF;
+  color: #FFF;
+}
+.simpledatepicker-days > span.simpledatepicker-active-day {
+  outline: 1px solid #ADC2EB;
+}
+.simpledatepicker-days > span.simpledatepicker-day-in.simpledatepicker-active-day {
+  background-color: #D6EBFF;
+}
+.simpledatepicker-days > span.simpledatepicker-day-in:hover {
+  outline: 1px solid #666;
+}
