@@ -13,6 +13,7 @@ SimpleDatePicker.bind = function (fn, context) {
   };
 };
 
+
 // Add an event to an element. Return the handler.
 SimpleDatePicker.addEventListener = function (element, eventName, handler, context) {
   var names = eventName.split(/\s+/), i, l;
@@ -384,6 +385,7 @@ SimpleDatePicker.Date = SimpleDatePicker.Class.extend({
 });
 
 
+
 SimpleDatePicker.date = function (date, options) {
   return new SimpleDatePicker.Date(date, options);
 };
@@ -612,6 +614,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
         removeClass(day, classSelectedDay);
       }
     }
+
 
     for (i = 0, l = selection.length; i < l; i++) {
       if (selection[i] === date) {
@@ -856,6 +859,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
       date.add('months', 1);
     }
 
+
     this.container = container;
     this.calendars = calendars;
 
@@ -911,6 +915,10 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
     }
   },
 
+  // Check if the date picker is visible.
+  visible: function () {
+    return this.container.style.display !== 'none';
+  },
   // Update the position and size of the selector.
   updatePosition: function () {
     var container = this.container,
@@ -986,6 +994,11 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
     this.fire('select', this.getSelection());
   },
 
+  // Clear the selected items.
+  clear: function () {
+    this.selection = [];
+    this.updateCalendars();
+  },
   // Add a listener to the datepicker events.
   on: function (eventName, handler) {
     var names = eventName.split(/\s+/), i, l;
