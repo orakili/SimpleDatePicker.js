@@ -395,7 +395,7 @@ SimpleDatePicker.date = function (date, options) {
  */
 SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
   options: {
-    // Selection mode of the calendar(s). Can be 'single', 'muliple' or 'range').
+    // Selection mode of the calendar(s). Can be 'single', 'muliple' or 'range'.
     mode: 'single',
     // Number of calendars to display.
     calendars: 2,
@@ -458,7 +458,9 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
     // Element to which attach the calendar.
     element: null,
     // Default visibility.
-    visible: true
+    visible: true,
+    // Automatically update the calendar position before display.
+    autoUpdatePosition: false
   },
 
   // Initialize the class object.
@@ -892,7 +894,10 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
   // Show the calendars.
   show: function () {
     if (this.container.style.display === 'none') {
-      this.fire('show');
+      if (this.options.autoUpdatePosition === true) {
+        this.updatePosition();
+      }
+      this.fire('show').fire('opened');
       this.container.style.display = '';
     }
   },
@@ -900,7 +905,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
   // Hide the calendars.
   hide: function () {
     if (this.container.style.display !== 'none') {
-      this.fire('hide');
+      this.fire('hide').fire('closed');
       this.container.style.display = 'none';
     }
   },
@@ -921,14 +926,21 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
   },
   // Update the position and size of the selector.
   updatePosition: function () {
-    var container = this.container,
-        element = this.options.element,
-        bounds;
-    if (container && element) {
-      bounds = element.getBoundingClientRect();
+    if (this.container && this.options.element) {
+      var container = this.container,
+          documentElement = document.documentElement,
+          body = document.body,
+          bounds = this.options.element.getBoundingClientRect(),
+          scrollTop = window.pageYOffset || documentElement.scrollTop || body.scrollTop,
+          scrollLeft = window.pageXOffset || documentElement.scrollLeft || body.scrollLeft,
+          clientTop = documentElement.clientTop || body.clientTop || 0,
+          clientLeft = documentElement.clientLeft || body.clientLeft || 0,
+          top = bounds.bottom + scrollTop - clientTop,
+          left = bounds.left + scrollLeft - clientLeft;
+
       container.style.position = 'absolute';
-      container.style.left = (bounds.left) + 'px';
-      container.style.top = (bounds.bottom) + 'px';
+      container.style.left = left + 'px';
+      container.style.top = top + 'px';
     }
   },
 
@@ -1044,6 +1056,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
         listeners[i](event);
       }
     }
+    return this;
   }
 });
 

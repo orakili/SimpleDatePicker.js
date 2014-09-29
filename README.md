@@ -1,4 +1,4 @@
 SimpleDatePicker.js
 ===================
 
-Standaline datepicker javascript library.
+Simple standalone datepicker javascript library.
