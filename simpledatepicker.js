@@ -900,6 +900,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
       this.fire('show').fire('opened');
       this.container.style.display = '';
     }
+    return this;
   },
 
   // Hide the calendars.
@@ -908,6 +909,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
       this.fire('hide').fire('closed');
       this.container.style.display = 'none';
     }
+    return this;
   },
 
   // Toggle visibility.
@@ -918,6 +920,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
     else {
       this.hide();
     }
+    return this;
   },
 
   // Check if the date picker is visible.
@@ -1010,6 +1013,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
   clear: function () {
     this.selection = [];
     this.updateCalendars();
+    return this;
   },
   // Add a listener to the datepicker events.
   on: function (eventName, handler) {
