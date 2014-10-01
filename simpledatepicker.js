@@ -398,7 +398,10 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
     // Selection mode of the calendar(s). Can be 'single', 'muliple' or 'range'.
     mode: 'single',
     // Number of calendars to display.
-    calendars: 2,
+    calendars: 1,
+    // Indicates if calendars are linked or not
+    // (changing month/year affects all calendars).
+    linked: true,
     // Default date.
     date: null,
     // Date creation function, moment.js like.
@@ -428,7 +431,9 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
       firstWeekDay: 'simpledatepicker-first-week-day',
       selectedDay: 'simpledatepicker-selected-day',
       activeDay: 'simpledatepicker-active-day',
-      today: 'simpledatepicker-today'
+      today: 'simpledatepicker-today',
+      multiple: 'simpledatepicker-multiple',
+      linked: 'simpledatepicker-linked'
     },
     // Navigation.
     navigation: {
@@ -455,8 +460,11 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
       headerDay: 'dd',
       day: 'D'
     },
-    // Element to which attach the calendar.
+    // Element to which attach the datepicker.
     element: null,
+    // Container in which to insert the datepicker,
+    // defaults to document.body if not defined.
+    container: null,
     // Default visibility.
     visible: true,
     // Automatically update the calendar position before display.
@@ -498,31 +506,48 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
         classDayIn = classes.dayIn,
         classPrevious = classes.titlePrevious,
         classNext = classes.titleNext,
-        classYear = classes.titleYear;
+        classYear = classes.titleYear,
+        calendar;
 
     if (hasClass(target, classDayIn)) {
       this.select(target);
     }
     else if (hasClass(target, classPrevious)) {
-      this.updateCalendars(hasClass(target, classYear) ? 'years' : 'months', -1);
+      calendar = options.linked ? null : this.retrieveCalendar(target);
+      this.updateCalendars(hasClass(target, classYear) ? 'years' : 'months', -1, calendar);
     }
     else if (hasClass(target, classNext)) {
-      this.updateCalendars(hasClass(target, classYear) ? 'years' : 'months', 1);
+      calendar = options.linked ? null : this.retrieveCalendar(target);
+      this.updateCalendars(hasClass(target, classYear) ? 'years' : 'months', 1, calendar);
     }
     return false;
   },
 
-  // Retrieve a calendar from a day element.
-  retrieveCalendar: function (day) {
-    var month = this.retrieveDate(day, true).month(),
+  // Retrieve a calendar from an element.
+  retrieveCalendar: function (element) {
+    var hasClass = SimpleDatePicker.hasClass,
+        calendarElement = null,
+        calendarClass = this.options.classes.calendar,
         calendars = this.calendars,
         calendar, i, l;
-    for (i = 0, l = calendars.length; i < l; i++) {
-      calendar = calendars[i];
-      if (calendar.month === month) {
-        return calendar;
+
+    while (element !== this.container) {
+      if (hasClass(element, calendarClass)) {
+        calendarElement = element;
+        break;
+      }
+      element = element.parentNode;
+    }
+
+    if (calendarElement) {
+      for (i = 0, l = calendars.length; i < l; i++) {
+        calendar = calendars[i];
+        if (calendar.calendar === calendarElement) {
+          return calendar;
+        }
       }
     }
+    return null;
   },
 
   // Retrieve the date associated with a day element.
@@ -695,9 +720,9 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
   },
 
   // Update calendars when previous/next month/year is pressed.
-  updateCalendars: function (type, value) {
-    var calendars = this.calendars,
-        calendar, i, l;
+  updateCalendars: function (type, value, calendar) {
+    var calendars = calendar ? [calendar] : this.calendars,
+        i, l;
     for (i = 0, l = calendars.length; i < l; i++) {
       calendar = calendars[i];
       if (typeof type !== 'undefined') {
@@ -846,6 +871,18 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
     };
   },
 
+  // Link calendars, changing month/year affects all calendars.
+  linkCalendars: function() {
+    SimpleDatePicker.addClass(this.container, this.options.classes.linked);
+    return this;
+  },
+
+  // Unlink calendars, changing month/year affects only the current calendar.
+  unlinkCalendars: function() {
+    SimpleDatePicker.removeClass(this.container, this.options.classes.linked);
+    return this;
+  },
+
   // Create the calendars.
   create: function () {
     var createElement = SimpleDatePicker.createElement,
@@ -861,6 +898,13 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
       date.add('months', 1);
     }
 
+    if (options.calendars > 1) {
+      SimpleDatePicker.addClass(container, options.classes.multiple);
+
+      if (options.linked) {
+        this.linkCalendars();
+      }
+    }
 
     this.container = container;
     this.calendars = calendars;
@@ -871,7 +915,12 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
       this.hide();
     }
 
-    document.body.appendChild(container);
+    if (this.options.container) {
+      this.options.container.appendChild(container);
+    }
+    else {
+      document.body.appendChild(container);
+    }
 
     SimpleDatePicker.addEventListener(container, 'click', this.handleClick);
   },
@@ -929,7 +978,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
   },
   // Update the position and size of the selector.
   updatePosition: function () {
-    if (this.container && this.options.element) {
+    if (this.container && this.options.element && !this.options.container) {
       var container = this.container,
           documentElement = document.documentElement,
           body = document.body,

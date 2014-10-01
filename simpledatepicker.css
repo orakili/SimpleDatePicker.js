@@ -12,12 +12,22 @@
 
 /** Calendar **/
 .simpledatepicker-calendar {
-  border-left: 2px solid #CCC;
   display: inline-block;
-  padding: 5px 5px 0px 10px;
+  padding: 5px 5px 0px 5px;
   width: 184px;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
-.simpledatepicker-calendar:first-child {
+.simpledatepicker-multiple .simpledatepicker-calendar {
+  border-left: 2px solid #CCC;
+  padding: 5px 5px 0px 10px;
+}
+.simpledatepicker-multiple .simpledatepicker-calendar.simpledatepicker-calendar-first {
   border-left: none;
   padding: 5px 10px 0px 5px;
 }
@@ -43,10 +53,10 @@
   font-weight: normal;
   cursor: default;
 }
-.simpledatepicker-calendar-first .simpledatepicker-title-next,
-.simpledatepicker-calendar-middle .simpledatepicker-title-previous,
-.simpledatepicker-calendar-middle .simpledatepicker-title-next,
-.simpledatepicker-calendar-last .simpledatepicker-title-previous {
+.simpledatepicker-linked .simpledatepicker-calendar-first .simpledatepicker-title-next,
+.simpledatepicker-linked .simpledatepicker-calendar-middle .simpledatepicker-title-previous,
+.simpledatepicker-linked .simpledatepicker-calendar-middle .simpledatepicker-title-next,
+.simpledatepicker-linked .simpledatepicker-calendar-last .simpledatepicker-title-previous {
   visibility:hidden;
 }
 .simpledatepicker-title-month:hover {
