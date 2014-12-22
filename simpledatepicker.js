@@ -247,7 +247,7 @@ SimpleDatePicker.Date = SimpleDatePicker.Class.extend({
   },
 
   second: function (second) {
-    return this.second(second);
+    return this.seconds(second);
   },
 
   seconds: function (seconds) {
@@ -383,8 +383,6 @@ SimpleDatePicker.Date = SimpleDatePicker.Class.extend({
     return new SimpleDatePicker.Date(this.dateObject, this.options);
   }
 });
-
-
 
 SimpleDatePicker.date = function (date, options) {
   return new SimpleDatePicker.Date(date, options);
