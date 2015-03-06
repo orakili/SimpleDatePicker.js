@@ -1097,7 +1097,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
     if (listeners) {
       event = {
         type: eventName,
-        target: this,
+        target: this
       };
       if (data) {
         event.data = data;
