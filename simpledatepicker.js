@@ -18,6 +18,14 @@ SimpleDatePicker.bind = function (fn, context) {
 SimpleDatePicker.addEventListener = function (element, eventName, handler, context) {
   var names = eventName.split(/\s+/), i, l;
 
+  if (!document.addEventListener) {
+    var callback = handler;
+    handler = function (event) {
+      event.target = event.target || event.srcElement;
+      callback.call(this, event);
+    };
+  }
+
   if (context) {
     handler = SimpleDatePicker.bind(handler, context);
   }
