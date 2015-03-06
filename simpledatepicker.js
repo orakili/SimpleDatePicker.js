@@ -61,7 +61,7 @@ SimpleDatePicker.getStyle = function (element, property, pseudoElement) {
   if (window.getComputedStyle) {
     return window.getComputedStyle(element, pseudoElement)[property];
   }
-  else if (document.defaultView.getComputedStyle) {
+  else if (document.defaultView && document.defaultView.getComputedStyle) {
     return document.defaultView.getComputedStyle(element, pseudoElement)[property];
   }
   else if (element.currentStyle) {
