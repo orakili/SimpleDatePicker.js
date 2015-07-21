@@ -1007,7 +1007,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
         i, l;
 
     if (selectionLength > 0) {
-      selection = selection.slice(0).sort();
+      selection = selection.slice(0).sort(function(a, b) { return a - b; });
 
       if (raw !== true) {
         for (i = 0, l = selection.length; i < l; i++) {
@@ -1045,7 +1045,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
           }
         }
       }
-      selection.sort();
+      selection.sort(function(a, b) { return a - b; });
 
       if (mode === 'range' && selection.length > 1) {
         selection = [selection[0], selection[1]];
