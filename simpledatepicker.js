@@ -933,9 +933,6 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
 
   // Create a date wrapper object.
   createDate: function (date, stripTime, utc) {
-    if (typeof date === 'string' && utc !== false) {
-      date = date.replace(/\s*\+\d{4}/, '') + ' +0000';
-    }
     date = this.options.dateFunction(date);
     if (utc !== false) {
       date.utc();
