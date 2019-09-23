@@ -8,6 +8,21 @@
   font-family: 'Helvetica Neue', 'Helvetica';
   color: #555;
   cursor: default;
+  box-sizing: border-box;
+}
+.simpledatepicker-container * {
+  box-sizing: border-box;
+}
+
+/** Reset button styles **/
+.simpledatepicker-container button {
+  background: none;
+  border: 0;
+  -webkit-appearance: none;
+}
+
+.simpledatepicker-container button:focus {
+  /*border: 1px solid blue;*/
 }
 
 /** Calendar **/
@@ -52,6 +67,7 @@
   font-size: 12px;
   font-weight: normal;
   cursor: default;
+  line-height: 20px;
 }
 .simpledatepicker-linked .simpledatepicker-calendar-first .simpledatepicker-title-next,
 .simpledatepicker-linked .simpledatepicker-calendar-middle .simpledatepicker-title-previous,
@@ -59,11 +75,13 @@
 .simpledatepicker-linked .simpledatepicker-calendar-last .simpledatepicker-title-previous {
   visibility:hidden;
 }
-.simpledatepicker-title-month:hover {
+.simpledatepicker-title-month:hover,
+.simpledatepicker-title-month:focus {
   color: #7EA0E2;
 }
 
-.simpledatepicker-title-year:hover {
+.simpledatepicker-title-year:hover,
+.simpledatepicker-title-year:focus {
   color:#6FDF81;
 }
 
@@ -84,15 +102,45 @@
   margin-left: 0;
 }
 
+.simpledatepicker-container button.simpledatepicker-control {
+  display: inline-block;
+  height: 20px;
+  position: relative;
+  text-indent: -99999px;
+  width: 16px;
+}
+
+.simpledatepicker-container button.simpledatepicker-control:before {
+    content: "›";
+    font-size: 20px;
+    height: 100%;
+    left: 0;
+    line-height: 20px;
+    padding: 0;
+    position: absolute;
+    text-indent: 0;
+    top: 0;
+    width: 100%;
+}
+.simpledatepicker-container button.simpledatepicker-control.simpledatepicker-title-previous.simpledatepicker-title-year:before {
+  content: "«";
+}
+.simpledatepicker-container button.simpledatepicker-control.simpledatepicker-title-previous.simpledatepicker-title-month:before {
+  content: "‹";
+}
+.simpledatepicker-container button.simpledatepicker-control.simpledatepicker-title-next.simpledatepicker-title-year:before {
+  content: "»";
+}
+
 /** Days **/
 .simpledatepicker-days {
   position: relative;
 }
-.simpledatepicker-days > span {
+.simpledatepicker-days > button {
   overflow: hidden;
   display: inline-block;
   width: 20px;
-  height: 14px;
+  height: 16px;
   line-height: 14px;
   text-align: right;
   margin-left: 5px;
@@ -100,33 +148,34 @@
   padding: 1px;
   cursor: default;
 }
-.simpledatepicker-days > span.simpledatepicker-first-week-day  {
+.simpledatepicker-days > button.simpledatepicker-first-week-day  {
   margin-left: 0;
 }
-.simpledatepicker-days > span.simpledatepicker-day-in {
+.simpledatepicker-days > button.simpledatepicker-day-in {
   background-color: #FFF;
-  outline: 1px solid #ccc;
+  border: 1px solid #ccc;
   cursor: pointer;
 }
-.simpledatepicker-days > span.simpledatepicker-day-out {
+.simpledatepicker-days > button.simpledatepicker-day-out {
   color: #CCC;
 }
-.simpledatepicker-days > span.simpledatepicker-today {
-  outline: 1px solid #F00;
+.simpledatepicker-days > button.simpledatepicker-today {
+  border: 1px solid #F00;
 }
-.simpledatepicker-days > span.simpledatepicker-selected-day {
-  outline: 1px solid #3366CC;
+.simpledatepicker-days > button.simpledatepicker-selected-day {
+  border: 1px solid #3366CC;
 }
-.simpledatepicker-days > span.simpledatepicker-day-in.simpledatepicker-selected-day {
+.simpledatepicker-days > button.simpledatepicker-day-in.simpledatepicker-selected-day {
   background-color: #99CCFF;
   color: #FFF;
 }
-.simpledatepicker-days > span.simpledatepicker-active-day {
-  outline: 1px solid #ADC2EB;
+.simpledatepicker-days > button.simpledatepicker-active-day {
+  border: 1px solid #ADC2EB;
 }
-.simpledatepicker-days > span.simpledatepicker-day-in.simpledatepicker-active-day {
+.simpledatepicker-days > button.simpledatepicker-day-in.simpledatepicker-active-day {
   background-color: #D6EBFF;
 }
-.simpledatepicker-days > span.simpledatepicker-day-in:hover {
-  outline: 1px solid #666;
+.simpledatepicker-days > button.simpledatepicker-day-in:hover,
+.simpledatepicker-days > button.simpledatepicker-day-in:focus {
+  border: 1px solid #666;
 }

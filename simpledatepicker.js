@@ -208,7 +208,7 @@ SimpleDatePicker.Class.extend = function (properties) {
  */
 SimpleDatePicker.Date = SimpleDatePicker.Class.extend({
   options: {
-    months: ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     weekDays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     utc: true,
     formats: /(YYYY|YY|MMMM|MMM|MM|M|DDDD|DDD|DD|D|dddd|ddd|dd|d)/g
@@ -444,19 +444,19 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
     // Navigation.
     navigation: {
       previousYear: {
-        content: '&#x00AB;',
+        content: 'Previous year',
         title: 'previous year'
       },
       previousMonth: {
-        content: '&#x2039;',
+        content: 'Previous month',
         title: 'previous month'
       },
       nextMonth: {
-        content: '&#x203A;',
+        content: 'Next month',
         title: 'next month'
       },
       nextYear: {
-        content: '&#x00BB;',
+        content: 'Next year',
         title: 'next year'
       }
     },
@@ -527,6 +527,66 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
       this.updateCalendars(hasClass(target, classYear) ? 'years' : 'months', 1, calendar);
     }
     return false;
+  },
+
+  // Handle keypress for navigating calendar
+  handleKeyPress: function (e) {
+    var classes = this.options.classes,
+    classDayIn = classes.dayIn,
+    classDays = classes.days,
+    isArrowRight = e.key === 'ArrowRight' || e.keyCode === 39,
+    isArrowLeft = e.key === 'ArrowLeft' || e.keyCode === 37,
+    isArrowDown = e.key === 'ArrowDown' || e.keyCode === 40,
+    isArrowUp = e.up === 'ArrowUp' || e.keyCode === 38,
+    currentPosition,
+    dateIsFocused,
+    datesContainerIsFocused,
+    activeDates,
+    focusedEl,
+    moveTo,
+    newPosition;
+
+    if (!isArrowRight && !isArrowLeft && !isArrowDown && !isArrowUp) {
+      return;
+    }
+    e.preventDefault();
+
+    focusedEl = document.activeElement;
+    dateIsFocused = focusedEl.className.indexOf(classDayIn) !== -1;
+    datesContainerIsFocused = focusedEl.className.indexOf(classDays) !== -1;
+    currentPosition = parseInt(focusedEl.innerText, 10) - 1;
+    activeDates = this.container.querySelectorAll('.' + classDayIn);
+
+    // Dates container is focused.
+    if (datesContainerIsFocused && (isArrowRight || isArrowDown)) {
+      newPosition = 0;
+    }
+    // Date is focused.
+    else if (dateIsFocused) {
+      if (isArrowLeft) {
+        newPosition = currentPosition - 1;
+      }
+      if (isArrowRight) {
+        newPosition = currentPosition + 1;
+      }
+      if (isArrowDown) {
+        newPosition = currentPosition + 7;
+      }
+      if (isArrowUp) {
+        newPosition = currentPosition - 7;
+      }
+    }
+
+    moveTo = activeDates[newPosition];
+    if (moveTo && moveTo.className.indexOf(classDayIn) !== -1) {
+      // Remove tabindex from previously focused dates.
+      for (var i = 0; i < activeDates.length; i++) {
+        activeDates[i].setAttribute('tabindex', '-1');
+      }
+      // Move to date.
+      moveTo.setAttribute('tabindex', 0);
+      moveTo.focus();
+    }
   },
 
   // Retrieve a calendar from an element.
@@ -642,9 +702,11 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
       day = days[i];
       if (select !== false) {
         addClass(day, classSelectedDay);
+        day.setAttribute('aria-selected', 'true');
       }
       else {
         removeClass(day, classSelectedDay);
+        day.removeAttribute('aria-selected');
       }
     }
 
@@ -776,6 +838,9 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
                         (date.month() === month ? classDayIn : classDayOut) +
                         (this.today === time ? ' ' + classToday : '');
     element.innerHTML = date.format(formatDay);
+    if (date.month() !== month) {
+      element.setAttribute('disabled', 'disabled');
+    }
 
     this.updateSelectedDay(element, time);
 
@@ -807,7 +872,8 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
 
     // Create the days.
     while (i--) {
-      days.push(updateDay(createElement('span', null, container), month, date));
+      var label = date.dateObject.getDate() + ' ' + date.options.months[date.dateObject.getMonth()];
+      days.push(updateDay(createElement('button', {'type': 'button', 'aria-label': label, 'tabindex': '-1'}, container), month, date));
       date.add('days', 1);
     }
 
@@ -852,11 +918,11 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
 
     // Month, Year header and navigation.
     title = createElement('div', {'class': classes.title}, calendar);
-    createElement('span', {'class': classPrevious + ' ' + classYear, title: previousYear.title}, title, previousYear.content);
-    createElement('span', {'class': classPrevious + ' ' + classMonth, title: previousMonth.title}, title, previousMonth.content);
+    createElement('button', {'class': 'simpledatepicker-control ' + classPrevious + ' ' + classYear, 'type': 'button'}, title, previousYear.content);
+    createElement('button', {'class': 'simpledatepicker-control ' + classPrevious + ' ' + classMonth, 'type': 'button'}, title, previousMonth.content);
     titleDate = createElement('span', {'class': classes.titleDate}, title, date.format(formatTitleDate));
-    createElement('span', {'class': classNext + ' ' + classMonth, title: nextMonth.title}, title, nextMonth.content);
-    createElement('span', {'class': classNext + ' ' + classYear, title: nextYear.title}, title, nextYear.content);
+    createElement('button', {'class': 'simpledatepicker-control ' + classNext + ' ' + classMonth, 'type': 'button'}, title, nextMonth.content);
+    createElement('button', {'class': 'simpledatepicker-control ' + classNext + ' ' + classYear, 'type': 'button'}, title, nextYear.content);
 
     // Days header.
     header = createElement('div', {'class': classes.header}, calendar);
@@ -866,7 +932,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
     }
 
     // Calendar days.
-    days = createElement('div', {'class': classes.days}, calendar);
+    days = createElement('div', {'class': classes.days, 'tabindex': '0'}, calendar);
     days = this.createDays(date, days);
 
     return {
@@ -891,6 +957,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
 
   // Create the calendars.
   create: function () {
+
     var createElement = SimpleDatePicker.createElement,
         options = this.options,
         container = createElement('div', {'class': options.classes.container}),
@@ -929,6 +996,7 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
     }
 
     SimpleDatePicker.addEventListener(container, 'click', this.handleClick);
+    SimpleDatePicker.addEventListener(container, 'keydown', this.handleKeyPress);
   },
 
   // Create a date wrapper object.
@@ -951,6 +1019,12 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
       }
       this.fire('show').fire('opened');
       this.container.style.display = '';
+      // Focus first selectable date in the datepicker.
+      var firstDate = this.container.querySelectorAll('.simpledatepicker-day-in')[0];
+      if (firstDate) {
+        firstDate.setAttribute('tabindex', '0');
+        firstDate.focus();
+      }
     }
     return this;
   },
@@ -1085,7 +1159,8 @@ SimpleDatePicker.DatePicker = SimpleDatePicker.Class.extend({
     var names = eventName.split(/\s+/), listeners, i, j, l;
     for (i = 0, l = names.length; i < l; i++) {
       eventName = names[i];
-      if ((listeners = this.listeners[eventName])) {
+      if (this.listeners[eventName]) {
+        listeners = this.listeners[eventName];
         for (j = listeners.length - 1; j >= 0; j--) {
           if (listeners[j] === handler) {
             this.listeners[eventName].splice(j, 1);
